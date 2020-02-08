@@ -1,23 +1,27 @@
 {
   "env": {
-    "browser": true,
+    "shared-node-browser": true,
     "es6": true,
     "node": true
   },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:react/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "sourceType": "module",
     "project": "./tsconfig.json",
     "ecmaVersion": 2020,
     "ecmaFeatures": {
       "jsx": true
     }
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "no-console": "off",
+    "no-debugger": "off"
   }
 }
