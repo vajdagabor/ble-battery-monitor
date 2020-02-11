@@ -126,10 +126,14 @@ class BLE implements WebBle {
     characteristicId: string
   ) {
     const device = this.getDevice(id)
-    const server = await device.gatt.connect()
-    const service = await server.getPrimaryService(serviceId)
-    console.log(service)
-    return service.getCharacteristic(characteristicId)
+    try {
+      const server = await device.gatt.connect()
+      const service = await server.getPrimaryService(serviceId)
+      console.log(service)
+      return service.getCharacteristic(characteristicId)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   /**
@@ -145,11 +149,15 @@ class BLE implements WebBle {
       serviceId,
       characteristicId
     )
-    console.log(characteristic)
-    const valueDataView = await characteristic.readValue()
-    const valueUint8Array = new Uint8Array(valueDataView.buffer)
-    console.log(valueUint8Array)
-    return valueUint8Array
+    try {
+      console.log(characteristic)
+      const valueDataView = await characteristic.readValue()
+      const valueUint8Array = new Uint8Array(valueDataView.buffer)
+      console.log(valueUint8Array)
+      return valueUint8Array
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   /**
@@ -166,16 +174,20 @@ class BLE implements WebBle {
     characteristicId: string,
     cb: (data: Uint8Array) => void
   ) {
-    const characteristic = await this.getCharacteristic(
-      id,
-      serviceId,
-      characteristicId
-    )
-    await characteristic.startNotifications()
-    characteristic.addEventListener('characteristicvaluechanged', () => {
-      const value = new Uint8Array(characteristic.value.buffer)
-      cb(value)
-    })
+    try {
+      const characteristic = await this.getCharacteristic(
+        id,
+        serviceId,
+        characteristicId
+      )
+      await characteristic.startNotifications()
+      characteristic.addEventListener('characteristicvaluechanged', () => {
+        const value = new Uint8Array(characteristic.value.buffer)
+        cb(value)
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
