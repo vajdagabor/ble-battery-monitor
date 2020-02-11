@@ -35,9 +35,9 @@ function App() {
     }
   }
 
-  function handleDisconnect(deviceId) {
+  async function handleDisconnect(deviceId) {
     try {
-      BLE.disconnect(deviceId)
+      await BLE.disconnect(deviceId)
     } catch (error) {
       console.error(
         `Disconnecting from ${deviceId} resulted in an error:`,
