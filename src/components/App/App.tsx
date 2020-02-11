@@ -7,7 +7,12 @@ const BLE = new BLEClass()
 console.log(BLE)
 
 type BLEDeviceList = {
-  [id: string]: { id: string; name?: string; isConnected: boolean }
+  [id: string]: {
+    id: string
+    name?: string
+    isConnected: boolean
+    batteryLevel: number
+  }
 }
 
 function App() {
@@ -49,11 +54,21 @@ function App() {
   function onConnect(deviceId) {
     console.log(`Device has been connected (${deviceId})`)
     updateDevice(deviceId, 'isConnected', true)
+    readBatteryLevel(deviceId)
   }
 
   function onDisconnect(deviceId) {
     console.log(`Device has been disconnected (${deviceId})`)
     updateDevice(deviceId, 'isConnected', false)
+  }
+
+  async function readBatteryLevel(deviceId) {
+    try {
+      const value = await BLE.read(deviceId, 'battery_service', 'battery_level')
+      updateDevice(deviceId, "batteryLevel", value[0])
+    } catch (error) {
+      console.error(`Error while getting battery level for device ${deviceId}`)
+    }
   }
 
   function updateDeviceList() {
@@ -85,6 +100,7 @@ function App() {
                 <Device
                   id={id}
                   name={device.name}
+                  batteryLevel={device.batteryLevel}
                   isConnected={device.isConnected}
                   connect={() => handleConnect(id)}
                   disconnect={() => handleDisconnect(id)}
