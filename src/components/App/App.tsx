@@ -13,6 +13,13 @@ type BLEDeviceList = {
 function App() {
   const [devices, setDevices] = useState<BLEDeviceList>({})
 
+  function updateDevice(deviceId, key, value) {
+    setDevices(previousDevices => {
+      const changedDevice = { ...previousDevices[deviceId], [key]: value }
+      return { ...previousDevices, [deviceId]: changedDevice }
+    })
+  }
+
   function handleScanRequest() {
     BLE.startScanning(() => {
       updateDeviceList()
@@ -41,14 +48,12 @@ function App() {
 
   function onConnect(deviceId) {
     console.log(`Device has been connected (${deviceId})`)
-    const changedDevice = { ...devices[deviceId], isConnected: true }
-    setDevices({ ...devices, [deviceId]: changedDevice })
+    updateDevice(deviceId, 'isConnected', true)
   }
 
   function onDisconnect(deviceId) {
     console.log(`Device has been disconnected (${deviceId})`)
-    const changedDevice = { ...devices[deviceId], isConnected: false }
-    setDevices({ ...devices, [deviceId]: changedDevice })
+    updateDevice(deviceId, 'isConnected', false)
   }
 
   function updateDeviceList() {
