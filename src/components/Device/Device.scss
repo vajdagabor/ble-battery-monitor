@@ -2,15 +2,33 @@
 @import 'src/styles/lib/colors';
 
 .Device {
-  padding: 20px;
+  display: flex;
   margin-bottom: 20px;
   border: 1px solid $color-3;
   border-radius: 3px;
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-.Device__Header {
-  margin-bottom: 10px;
+.Device__Main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.Device__Battery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: transparentize($color-6, 0.8);
+  font-size: 48px;
+  font-weight: bold;
+  transition: color 3s 1s ease-out;
+}
+
+.Device__Title {
+  height: 5em;
 }
 
 .Device__Name {
@@ -23,4 +41,13 @@
 .Device__ID {
   font-size: 12px;
   letter-spacing: 0.05em;
+}
+
+// Variants
+// --------
+
+.Device--Connected {
+  .Device__Battery {
+    color: $color-6;
+  }
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import base64ToHex from '../../lib/base64-to-hex'
 import Button from '../Button'
+import cx from '../../lib/cx'
 import './Device.scss'
 
 function Device({
@@ -11,27 +12,27 @@ function Device({
   connect,
   disconnect
 }) {
-  const batteryLabel = isConnected
-    ? 'Battery level'
-    : 'Last known battery level'
-
+  const classes = cx('Device', {'Device--Connected': isConnected})
   return (
-    <div className="Device">
-      <div className="Device__Header">
-        <h2 className="Device__Name">{name || 'Unnamed device'}</h2>
-        <span className="Device__ID">{base64ToHex(id)}</span>
-      </div>
-      {batteryLevel && (
-        <div>
-          {batteryLabel}: {batteryLevel}%
+    <div className={classes}>
+      <div className="Device__Main">
+        <div className="Device__Title">
+          <h2 className="Device__Name">{name || 'Unnamed device'}</h2>
+          <span className="Device__ID">{base64ToHex(id)}</span>
         </div>
-      )}
-      <div className="Device__Button"></div>
-      <Button
-        label={isConnected ? 'Disconnect' : 'Connect'}
-        onClick={isConnected ? disconnect : connect}
-        variant={isConnected && 'Danger'}
-      />
+        <div className="Device__Button">
+          <Button
+            label={isConnected ? 'Disconnect' : 'Connect'}
+            onClick={isConnected ? disconnect : connect}
+            variant={isConnected && 'Danger'}
+          />
+        </div>
+      </div>
+      <div className="Device__Battery">
+        {batteryLevel && (
+          <span className="Device__BatteryLevel">{batteryLevel}%</span>
+        )}
+      </div>
     </div>
   )
 }
