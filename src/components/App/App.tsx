@@ -20,6 +20,8 @@ type BLEDeviceList = {
 function App() {
   const [devices, setDevices] = useState<BLEDeviceList>({})
 
+  const allDevices = () => Object.values(devices)
+
   function updateDevice(deviceId, key, value) {
     setDevices(previousDevices => {
       const changedDevice = { ...previousDevices[deviceId], [key]: value }
@@ -27,13 +29,14 @@ function App() {
     })
   }
 
-  function handleScanRequest() {
+  async function scan() {
+    await disconnectAll()
     BLE.startScanning(() => {
       updateDeviceList()
     })
   }
 
-  async function handleConnect(deviceId) {
+  async function connect(deviceId) {
     try {
       await BLE.connect(deviceId, () => onDisconnect(deviceId))
       onConnect(deviceId)
@@ -42,7 +45,7 @@ function App() {
     }
   }
 
-  async function handleDisconnect(deviceId) {
+  async function disconnect(deviceId) {
     try {
       await BLE.disconnect(deviceId)
     } catch (error) {
@@ -50,6 +53,12 @@ function App() {
         `Disconnecting from ${deviceId} resulted in an error:`,
         error
       )
+    }
+  }
+
+  async function disconnectAll() {
+    for (let device of allDevices()) {
+      if (device.isConnected) await disconnect(device.id)
     }
   }
 
@@ -117,8 +126,8 @@ function App() {
                   name={device.name}
                   batteryLevel={device.batteryLevel}
                   isConnected={device.isConnected}
-                  connect={() => handleConnect(id)}
-                  disconnect={() => handleDisconnect(id)}
+                  connect={() => connect(id)}
+                  disconnect={() => disconnect(id)}
                 />
               </li>
             ))}
@@ -129,7 +138,7 @@ function App() {
       )}
       <hr />
       <div>
-        <button type="button" onClick={handleScanRequest}>
+        <button type="button" onClick={scan}>
           Scan
         </button>
       </div>
