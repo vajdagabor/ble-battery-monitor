@@ -3,7 +3,7 @@ import BLEClass from '../../lib/ble'
 import pluralise from '../../lib/pluralise'
 import Device from '../Device'
 
-const BLE = new BLEClass()
+const BLE = new BLEClass(['battery_service'])
 console.log(BLE)
 
 type BLEDeviceState = {

@@ -1,5 +1,3 @@
-const bt = navigator.bluetooth
-
 type DeviceId = string
 
 interface WebBle {
@@ -20,11 +18,15 @@ interface WebBle {
   disconnect: (id: DeviceId) => Promise<void>
 }
 
+const bt = navigator.bluetooth
+
 class BLE implements WebBle {
   /**
    * Cache for the discovered device objects
    */
   private devices: { [id: string]: BluetoothDevice } = {}
+
+  constructor(public services: string[] = []) {}
 
   /**
    * Stores a device object in the cache
@@ -61,9 +63,14 @@ class BLE implements WebBle {
   async startScanning(cb: (id: DeviceId, name: string) => void): Promise<void> {
     try {
       const device = await bt.requestDevice({
-        acceptAllDevices: true,
-        optionalServices: ['battery_service']
+        filters: [{
+          services: this.services
+        }]
       })
+      // const device = await bt.requestDevice({
+      //   acceptAllDevices: true,
+      //   optionalServices: this.services
+      // })
       console.log('Scanning for devices…')
       this.storeDevice(device)
       cb(device.id, device.name)
