@@ -86,7 +86,7 @@ function App() {
   }
 
   function subscribeToBatteryLevelChanges(deviceId) {
-    BLE.subscribe(deviceId, 'battery_service', 'battery_level', (value) =>
+    BLE.subscribe(deviceId, 'battery_service', 'battery_level', value =>
       updateDevice(deviceId, 'batteryLevel', value[0])
     )
   }
@@ -124,11 +124,10 @@ function App() {
         />
       ) : (
         <EmptyState>
-          <p>There are no devices yet. Scan with the button!</p>
+          <p>This little tool scans for BLE devices with battery service, and shows their battery level. Scan with the button to find your first&nbsp;device!</p>
         </EmptyState>
       )}
-      <hr />
-      <div>
+      <div style={{ textAlign: 'center' }}>
         <Button label="Find a device" onClick={scan} variant="Primary" />
       </div>
     </Screen>
