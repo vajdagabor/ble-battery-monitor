@@ -1,8 +1,15 @@
 import React from 'react'
 import Device from '../Device'
+import { BLEDevice } from '../../types'
 import './DeviceList.scss'
 
-function DeviceList({ devices = [], connect, disconnect }) {
+type Props = {
+  devices: BLEDevice[],
+  connect: (id: string) => void,
+  disconnect: (id: string) => void
+}
+
+function DeviceList({ devices = [], connect, disconnect }: Props) {
   return (
     <ul>
       {devices.map(({id, name, batteryLevel, isConnected}) => (

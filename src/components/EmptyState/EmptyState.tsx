@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import './EmptyState.scss'
 
-function EmptyState({ children }) {
+const EmptyState: FunctionComponent = ({ children }) => {
   return (
     <section className="EmptyState">
       {children}

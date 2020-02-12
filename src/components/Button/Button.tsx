@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { MouseEvent } from 'react'
 import './Button.scss'
 import cx from 'classnames'
 
-function Button({ label, onClick, variant = undefined }) {
+type Props = {
+  label: string,
+  variant?: string,
+  onClick?: (...attrs: any) => void
+}
+
+function Button({ label, onClick, variant }: Props) {
   const variantClass = variant ? `Button--${variant}` : undefined
   const classes = cx('Button', variantClass)
   return (

@@ -4,6 +4,15 @@ import Button from '../Button'
 import cx from 'classnames'
 import './Device.scss'
 
+type Props = {
+  id: string,
+  name: string,
+  batteryLevel: number,
+  isConnected: boolean,
+  connect: (id: string) => void,
+  disconnect: (id: string) => void
+}
+
 function Device({
   id,
   name,
@@ -11,7 +20,7 @@ function Device({
   isConnected = false,
   connect,
   disconnect
-}) {
+}: Props) {
   const classes = cx('Device', {'Device--Connected': isConnected})
   return (
     <div className={classes}>

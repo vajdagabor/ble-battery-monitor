@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import './Screen.scss'
 
-function Screen({ title, children }) {
+type Props = {
+  title: string
+}
+
+const Screen: FunctionComponent<Props> = ({ title, children }) => {
   return (
     <div className="Screen">
       <div className="Screen__Content">
         <h1 className="Screen__Title">{title}</h1>
-        <main className="Screen__Body">
-          {children}
-        </main>
+        <main className="Screen__Body">{children}</main>
       </div>
     </div>
   )

@@ -4,27 +4,20 @@ import Screen from '../Screen'
 import Button from '../Button'
 import DeviceList from '../DeviceList'
 import EmptyState from '../EmptyState'
+import { BLEDevice, BLEDeviceList, DeviceId } from '../../types'
 
 const BLE = new BLEClass(['battery_service'])
 console.log(BLE)
-
-type BLEDeviceState = {
-  id: string
-  name?: string
-  isConnected: boolean
-  batteryLevel?: number
-}
-
-type BLEDeviceList = {
-  [id: string]: BLEDeviceState
-}
 
 function App() {
   const [devices, setDevices] = useState<BLEDeviceList>({})
 
   const allDevices = () => Object.values(devices)
 
-  function updateDevice(deviceId, key, value) {
+  function updateDevice(deviceId: DeviceId, key: "isConnected", value: boolean): void
+  function updateDevice(deviceId: DeviceId, key: "batteryLevel", value: number): void
+
+  function updateDevice(deviceId: DeviceId, key: string, value: any) {
     setDevices(previousDevices => {
       const changedDevice = { ...previousDevices[deviceId], [key]: value }
       return { ...previousDevices, [deviceId]: changedDevice }
@@ -38,7 +31,7 @@ function App() {
     })
   }
 
-  async function connect(deviceId) {
+  async function connect(deviceId: DeviceId) {
     try {
       await BLE.connect(deviceId, () => onDisconnect(deviceId))
       onConnect(deviceId)
@@ -47,7 +40,7 @@ function App() {
     }
   }
 
-  async function disconnect(deviceId) {
+  async function disconnect(deviceId: DeviceId) {
     try {
       await BLE.disconnect(deviceId)
     } catch (error) {
@@ -64,19 +57,19 @@ function App() {
     }
   }
 
-  async function onConnect(deviceId) {
+  async function onConnect(deviceId: DeviceId) {
     console.log(`Device has been connected (${deviceId})`)
     updateDevice(deviceId, 'isConnected', true)
     await readBatteryLevel(deviceId)
     subscribeToBatteryLevelChanges(deviceId)
   }
 
-  function onDisconnect(deviceId) {
+  function onDisconnect(deviceId: DeviceId) {
     console.log(`Device has been disconnected (${deviceId})`)
     updateDevice(deviceId, 'isConnected', false)
   }
 
-  async function readBatteryLevel(deviceId) {
+  async function readBatteryLevel(deviceId: DeviceId) {
     try {
       const value = await BLE.read(deviceId, 'battery_service', 'battery_level')
       updateDevice(deviceId, 'batteryLevel', value[0])
@@ -85,7 +78,7 @@ function App() {
     }
   }
 
-  function subscribeToBatteryLevelChanges(deviceId) {
+  function subscribeToBatteryLevelChanges(deviceId: DeviceId) {
     BLE.subscribe(deviceId, 'battery_service', 'battery_level', value =>
       updateDevice(deviceId, 'batteryLevel', value[0])
     )
@@ -104,7 +97,7 @@ function App() {
     })
   }
 
-  function deviceStateFromDevice(device): BLEDeviceState {
+  function deviceStateFromDevice(device: BluetoothDevice): BLEDevice {
     return {
       id: device.id,
       name: device.name,
