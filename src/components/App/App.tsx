@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import BLEClass from '../../lib/ble'
+import Screen from '../Screen'
 import Device from '../Device'
 import Button from '../Button'
 
@@ -113,8 +114,7 @@ function App() {
   const deviceCount = () => Object.keys(devices).length
 
   return (
-    <>
-      <h1>BLE scanner</h1>
+    <Screen title="A Battery Watcher">
       {deviceCount() > 0 ? (
         <>
           <ul>
@@ -139,7 +139,7 @@ function App() {
       <div>
         <Button label="Find a device" onClick={scan} variant="Primary" />
       </div>
-    </>
+    </Screen>
   )
 }
 
