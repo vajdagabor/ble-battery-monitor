@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BLEClass from '../../lib/ble'
-import pluralise from '../../lib/pluralise'
 import Device from '../Device'
+import Button from '../Button'
 
 const BLE = new BLEClass(['battery_service'])
 console.log(BLE)
@@ -117,7 +117,6 @@ function App() {
       <h1>BLE scanner</h1>
       {deviceCount() > 0 ? (
         <>
-          <p>I found {pluralise(deviceCount(), 'device')}.</p>
           <ul>
             {Object.entries(devices).map(([id, device]) => (
               <li key={id}>
@@ -138,9 +137,7 @@ function App() {
       )}
       <hr />
       <div>
-        <button type="button" onClick={scan}>
-          Scan
-        </button>
+        <Button label="Find a device" onClick={scan} variant="Primary" />
       </div>
     </>
   )

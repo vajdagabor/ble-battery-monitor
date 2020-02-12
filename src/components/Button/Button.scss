@@ -1,0 +1,27 @@
+@import 'src/styles/lib/all-caps';
+@import 'src/styles/lib/colors';
+
+.Button {
+  @include all-caps;
+
+  padding: .5em 20px;
+  background-color: $color-3;
+  color: $color-0;
+  cursor: pointer;
+
+  &:hover:not(:active) {
+    background-color: mix($color-3, white, 70%);
+  }
+}
+
+.Button--Danger {
+  background-color: $color-2;
+
+  &:hover:not(:active) {
+    background-color: mix($color-2, white, 70%);
+  }
+}
+
+.Button--Primary {
+  font-size: 16px;
+}

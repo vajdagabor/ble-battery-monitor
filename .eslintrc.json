@@ -23,7 +23,8 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "no-console": "off",
-    "no-debugger": "off"
+    "no-debugger": "off",
+    "react/prop-types": 0
   },
   "settings": {
     "import/resolver": {

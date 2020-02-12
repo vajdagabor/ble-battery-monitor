@@ -1,5 +1,6 @@
 import React from 'react'
 import base64ToHex from '../../lib/base64-to-hex'
+import Button from '../Button'
 import './Device.scss'
 
 function Device({
@@ -28,13 +29,12 @@ function Device({
           {batteryLabel}: {batteryLevel}%
         </div>
       )}
-      <button
-        className="Device__ConnectButton"
-        type="button"
+      <div className="Device__Button"></div>
+      <Button
+        label={isConnected ? 'Disconnect' : 'Connect'}
         onClick={isConnected ? disconnect : connect}
-      >
-        {isConnected ? 'Disconnect' : 'Connect'}
-      </button>
+        variant={isConnected && 'Danger'}
+      />
     </div>
   )
 }

@@ -1,9 +1,10 @@
 @import 'src/styles/lib/all-caps';
+@import 'src/styles/lib/colors';
 
 .Device {
   padding: 20px;
   margin-bottom: 20px;
-  border: 1px solid var(--color-3);
+  border: 1px solid $color-3;
   background-color: rgba(255, 255, 255, 0.05);
 }
 
@@ -15,7 +16,7 @@
   @include all-caps();
   margin-bottom: .2em;
   font-size: 18px;
-  color: var(--color-6);
+  color: $color-6;
 }
 
 .Device__ID {
