@@ -10,14 +10,24 @@ function Device({
   connect,
   disconnect
 }) {
-  const batteryLabel = isConnected ? "Battery level" : "Last known battery level"
+  const batteryLabel = isConnected
+    ? 'Battery level'
+    : 'Last known battery level'
 
   return (
     <div className="Device">
-      <h2 className="Device__Name">{name || 'Unnamed device'}</h2>
-      <span className="Device__ID">{base64ToHex(id)}</span>
-      <div>{isConnected ? 'Connected' : 'Not connected'}</div>
-      {batteryLevel && <div>{batteryLabel}: {batteryLevel}%</div>}
+      <div className="Device__Header">
+        <h2 className="Device__Name">{name || 'Unnamed device'}</h2>
+        <span className="Device__ID">{base64ToHex(id)}</span>
+      </div>
+      <div className="Device__Status">
+        {isConnected ? 'Connected' : 'Not connected'}
+      </div>
+      {batteryLevel && (
+        <div>
+          {batteryLabel}: {batteryLevel}%
+        </div>
+      )}
       <button
         className="Device__ConnectButton"
         type="button"

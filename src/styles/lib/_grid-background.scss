@@ -1,0 +1,8 @@
+@mixin grid-background($gap, $width, $color, $accent-color) {
+  background-image: linear-gradient($color $width, transparent $width),
+                    linear-gradient(90deg, $color $width, transparent $width),
+                    linear-gradient($accent-color $width, transparent $width),
+                    linear-gradient(90deg, $accent-color $width, transparent $width);
+  background-size: $gap $gap, $gap $gap, $gap * 10 $gap * 10, $gap * 10 $gap * 10;
+  background-repeat: repeat;
+}
