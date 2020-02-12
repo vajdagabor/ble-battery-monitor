@@ -53,10 +53,11 @@ function App() {
     }
   }
 
-  function onConnect(deviceId) {
+  async function onConnect(deviceId) {
     console.log(`Device has been connected (${deviceId})`)
     updateDevice(deviceId, 'isConnected', true)
-    readBatteryLevel(deviceId)
+    await readBatteryLevel(deviceId)
+    subscribeToBatteryLevelChanges(deviceId)
   }
 
   function onDisconnect(deviceId) {
@@ -71,6 +72,12 @@ function App() {
     } catch (error) {
       console.error(`Error while getting battery level for device ${deviceId}`)
     }
+  }
+
+  function subscribeToBatteryLevelChanges(deviceId) {
+    BLE.subscribe(deviceId, 'battery_service', 'battery_level', (value) =>
+      updateDevice(deviceId, 'batteryLevel', value[0])
+    )
   }
 
   function updateDeviceList() {
