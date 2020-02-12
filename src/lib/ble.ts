@@ -61,22 +61,16 @@ class BLE implements WebBle {
    * @param cb - A function to be called when a device is found
    */
   async startScanning(cb: (id: DeviceId, name: string) => void): Promise<void> {
-    try {
-      const device = await bt.requestDevice({
-        filters: [{
+    const device = await bt.requestDevice({
+      filters: [
+        {
           services: this.services
-        }]
-      })
-      // const device = await bt.requestDevice({
-      //   acceptAllDevices: true,
-      //   optionalServices: this.services
-      // })
-      console.log('Scanning for devices…')
-      this.storeDevice(device)
-      cb(device.id, device.name)
-    } catch (error) {
-      console.error(error)
-    }
+        }
+      ]
+    })
+    console.log('Scanning for devices…')
+    this.storeDevice(device)
+    cb(device.id, device.name)
   }
 
   /**
@@ -97,14 +91,10 @@ class BLE implements WebBle {
   async connect(id: DeviceId, onDisconnect: () => void): Promise<void> {
     const device = this.getDevice(id)
     if (device.gatt.connected) return
-    try {
-      console.log(`Connection requested to device ${id}`)
-      await device.gatt.connect()
-      console.log(`Connected to device ${id}`)
-      device.addEventListener('gattserverdisconnected', onDisconnect)
-    } catch (error) {
-      console.error(error)
-    }
+    console.log(`Connection requested to device ${id}`)
+    device.addEventListener('gattserverdisconnected', onDisconnect)
+    await device.gatt.connect()
+    console.log(`Connected to device ${id}`)
   }
 
   /**
@@ -113,11 +103,7 @@ class BLE implements WebBle {
    * @param id - The device UUID
    */
   async disconnect(id: DeviceId) {
-    try {
-      this.getDevice(id).gatt.disconnect()
-    } catch (error) {
-      console.error(error)
-    }
+    this.getDevice(id).gatt.disconnect()
   }
 
   /**
@@ -133,14 +119,10 @@ class BLE implements WebBle {
     characteristicId: string
   ) {
     const device = this.getDevice(id)
-    try {
-      const server = await device.gatt.connect()
-      const service = await server.getPrimaryService(serviceId)
-      console.log(service)
-      return service.getCharacteristic(characteristicId)
-    } catch (error) {
-      console.error(error)
-    }
+    const server = await device.gatt.connect()
+    const service = await server.getPrimaryService(serviceId)
+    console.log(service)
+    return service.getCharacteristic(characteristicId)
   }
 
   /**
@@ -156,15 +138,11 @@ class BLE implements WebBle {
       serviceId,
       characteristicId
     )
-    try {
-      console.log(characteristic)
-      const valueDataView = await characteristic.readValue()
-      const valueUint8Array = new Uint8Array(valueDataView.buffer)
-      console.log(valueUint8Array)
-      return valueUint8Array
-    } catch (error) {
-      console.error(error)
-    }
+    console.log(characteristic)
+    const valueDataView = await characteristic.readValue()
+    const valueUint8Array = new Uint8Array(valueDataView.buffer)
+    console.log(valueUint8Array)
+    return valueUint8Array
   }
 
   /**
@@ -181,20 +159,16 @@ class BLE implements WebBle {
     characteristicId: string,
     cb: (data: Uint8Array) => void
   ) {
-    try {
-      const characteristic = await this.getCharacteristic(
-        id,
-        serviceId,
-        characteristicId
-      )
-      await characteristic.startNotifications()
-      characteristic.addEventListener('characteristicvaluechanged', () => {
-        const value = new Uint8Array(characteristic.value.buffer)
-        cb(value)
-      })
-    } catch (error) {
-      console.error(error)
-    }
+    const characteristic = await this.getCharacteristic(
+      id,
+      serviceId,
+      characteristicId
+    )
+    await characteristic.startNotifications()
+    characteristic.addEventListener('characteristicvaluechanged', () => {
+      const value = new Uint8Array(characteristic.value.buffer)
+      cb(value)
+    })
   }
 }
 
