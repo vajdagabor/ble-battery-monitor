@@ -1,7 +1,7 @@
 import React from 'react'
 import base64ToHex from '../../lib/base64-to-hex'
 import Button from '../Button'
-import cx from '../../lib/cx'
+import cx from 'classnames'
 import './Device.scss'
 
 function Device({

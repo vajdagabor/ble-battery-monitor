@@ -1,6 +1,6 @@
 import React from 'react'
 import './Button.scss'
-import cx from '../../lib/cx'
+import cx from 'classnames'
 
 function Button({ label, onClick, variant = undefined }) {
   const variantClass = variant ? `Button--${variant}` : undefined
