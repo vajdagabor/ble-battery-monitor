@@ -1,6 +1,6 @@
 {
-  "name": "electron-ts-webpack-react",
-  "productName": "electron-ts-webpack-react",
+  "name": "ble-battery-monitor",
+  "productName": "ble-battery-monitor",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
