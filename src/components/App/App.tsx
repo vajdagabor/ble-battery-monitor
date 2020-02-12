@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import BLEClass from '../../lib/ble'
 import Screen from '../Screen'
-import Device from '../Device'
 import Button from '../Button'
 import DeviceList from '../DeviceList'
+import EmptyState from '../EmptyState'
 
 const BLE = new BLEClass(['battery_service'])
 console.log(BLE)
@@ -121,9 +121,11 @@ function App() {
           devices={allDevices()}
           connect={connect}
           disconnect={disconnect}
-                />
+        />
       ) : (
-        <p>There are no devices yet. Scan with the button!</p>
+        <EmptyState>
+          <p>There are no devices yet. Scan with the button!</p>
+        </EmptyState>
       )}
       <hr />
       <div>
