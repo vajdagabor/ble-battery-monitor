@@ -3,6 +3,7 @@ import BLEClass from '../../lib/ble'
 import Screen from '../Screen'
 import Device from '../Device'
 import Button from '../Button'
+import DeviceList from '../DeviceList'
 
 const BLE = new BLEClass(['battery_service'])
 console.log(BLE)
@@ -116,22 +117,11 @@ function App() {
   return (
     <Screen title="A Battery Watcher">
       {deviceCount() > 0 ? (
-        <>
-          <ul>
-            {Object.entries(devices).map(([id, device]) => (
-              <li key={id}>
-                <Device
-                  id={id}
-                  name={device.name}
-                  batteryLevel={device.batteryLevel}
-                  isConnected={device.isConnected}
-                  connect={() => connect(id)}
-                  disconnect={() => disconnect(id)}
+        <DeviceList
+          devices={allDevices()}
+          connect={connect}
+          disconnect={disconnect}
                 />
-              </li>
-            ))}
-          </ul>
-        </>
       ) : (
         <p>There are no devices yet. Scan with the button!</p>
       )}
