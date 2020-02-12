@@ -21,9 +21,6 @@ function Device({
         <h2 className="Device__Name">{name || 'Unnamed device'}</h2>
         <span className="Device__ID">{base64ToHex(id)}</span>
       </div>
-      <div className="Device__Status">
-        {isConnected ? 'Connected' : 'Not connected'}
-      </div>
       {batteryLevel && (
         <div>
           {batteryLabel}: {batteryLevel}%
