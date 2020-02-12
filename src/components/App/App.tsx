@@ -6,13 +6,15 @@ import Device from '../Device'
 const BLE = new BLEClass()
 console.log(BLE)
 
+type BLEDeviceState = {
+  id: string
+  name?: string
+  isConnected: boolean
+  batteryLevel?: number
+}
+
 type BLEDeviceList = {
-  [id: string]: {
-    id: string
-    name?: string
-    isConnected: boolean
-    batteryLevel: number
-  }
+  [id: string]: BLEDeviceState
 }
 
 function App() {
@@ -65,25 +67,31 @@ function App() {
   async function readBatteryLevel(deviceId) {
     try {
       const value = await BLE.read(deviceId, 'battery_service', 'battery_level')
-      updateDevice(deviceId, "batteryLevel", value[0])
+      updateDevice(deviceId, 'batteryLevel', value[0])
     } catch (error) {
       console.error(`Error while getting battery level for device ${deviceId}`)
     }
   }
 
   function updateDeviceList() {
-    const newDevices = BLE.getAllDevices().reduce(
-      (out, device) => ({
-        ...out,
-        [device.id]: {
-          id: device.id,
-          name: device.name,
-          isConnected: BLE.isConnected(device.id)
-        }
-      }),
-      {}
-    )
-    setDevices(newDevices)
+    setDevices(previousDevices => {
+      const newDevicesArr = BLE.getAllDevices().filter(
+        d => previousDevices[d.id] === undefined
+      )
+      const newDevices = newDevicesArr.reduce(
+        (out, d) => ({ ...out, [d.id]: deviceStateFromDevice(d) }),
+        {}
+      )
+      return { ...previousDevices, ...newDevices }
+    })
+  }
+
+  function deviceStateFromDevice(device): BLEDeviceState {
+    return {
+      id: device.id,
+      name: device.name,
+      isConnected: BLE.isConnected(device.id)
+    }
   }
 
   const deviceCount = () => Object.keys(devices).length
