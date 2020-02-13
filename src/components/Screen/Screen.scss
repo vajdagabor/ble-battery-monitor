@@ -1,5 +1,6 @@
 @import 'src/styles/lib/grid-background';
 @import 'src/styles/lib/colors';
+@import 'src/styles/lib/all-caps';
 
 .Screen {
   @include grid-background(
@@ -11,6 +12,7 @@
 
   height: 100%;
   padding: 40px 20px;
+  -webkit-app-region: drag;
 }
 
 .Screen__Content {
@@ -20,7 +22,8 @@
 }
 
 .Screen__Title {
+  @include all-caps;
+  margin-bottom: 30px;
   color: $color-5;
-  font-size: 26px;
-  margin-bottom: 20px;
+  text-align: center;
 }

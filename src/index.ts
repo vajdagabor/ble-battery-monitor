@@ -10,11 +10,13 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    title: 'A Battery Watcher',
     width: 480,
-    minWidth: 480,
     height: 600,
+    minWidth: 480,
     minHeight: 600,
-    maximizable: false
+    maximizable: false,
+    titleBarStyle: 'hiddenInset'
   })
 
   // and load the index.html of the app.
