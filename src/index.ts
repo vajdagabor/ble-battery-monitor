@@ -16,7 +16,8 @@ const createWindow = () => {
     minWidth: 480,
     minHeight: 600,
     maximizable: false,
-    titleBarStyle: 'hiddenInset'
+    titleBarStyle: 'hiddenInset',
+    backgroundColor: '#0f0c0a'
   })
 
   // and load the index.html of the app.
