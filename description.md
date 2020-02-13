@@ -38,4 +38,4 @@ with the result, but only as a starting point for further improvements.
     the UI.
 *   New scan should be disabled while scanning is in progress.
 *   In some cases, when a device is not longer in range, the UI doesn't
-    update it's state.
+    update its state.
