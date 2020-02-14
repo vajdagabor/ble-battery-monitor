@@ -1,4 +1,4 @@
-import {DeviceId, WebBle} from '../types'
+import { DeviceId, WebBle } from '../types'
 
 const bt = navigator.bluetooth
 
@@ -25,7 +25,7 @@ class BLE implements WebBle {
    *
    * @param id - The device UUID
    */
-  getDevice(id: DeviceId) {
+  getDevice(id: DeviceId): BluetoothDevice | undefined {
     return this.devices[id]
   }
 
@@ -42,7 +42,9 @@ class BLE implements WebBle {
    *
    * @param cb - A function to be called when a device is found
    */
-  async startScanning(cb: (id: DeviceId, name: string) => void): Promise<void> {
+  async startScanning(
+    cb: (id: DeviceId, name?: string) => void
+  ): Promise<void> {
     const device = await bt.requestDevice({
       filters: [
         {
@@ -61,7 +63,7 @@ class BLE implements WebBle {
    * @param id - The device UUID
    */
   isConnected(id: DeviceId) {
-    return this.getDevice(id) && this.getDevice(id).gatt.connected
+    return Boolean(this.getDevice(id)?.gatt!.connected)
   }
 
   /**
@@ -72,10 +74,10 @@ class BLE implements WebBle {
    */
   async connect(id: DeviceId, onDisconnect: () => void): Promise<void> {
     const device = this.getDevice(id)
-    if (device.gatt.connected) return
+    if (!device || this.isConnected(id)) return
     console.log(`Connection requested to device ${id}`)
     device.addEventListener('gattserverdisconnected', onDisconnect)
-    await device.gatt.connect()
+    await device.gatt!.connect()
     console.log(`Connected to device ${id}`)
   }
 
@@ -85,7 +87,7 @@ class BLE implements WebBle {
    * @param id - The device UUID
    */
   async disconnect(id: DeviceId) {
-    this.getDevice(id).gatt.disconnect()
+    this.getDevice(id)?.gatt!.disconnect()
   }
 
   /**
@@ -101,7 +103,8 @@ class BLE implements WebBle {
     characteristicId: string
   ) {
     const device = this.getDevice(id)
-    const server = await device.gatt.connect()
+    if (!device) throw new Error(`Can’t find cached device with UUID "${id}" (not yet discovered)`)
+    const server = await device.gatt!.connect()
     const service = await server.getPrimaryService(serviceId)
     console.log(service)
     return service.getCharacteristic(characteristicId)
@@ -147,9 +150,9 @@ class BLE implements WebBle {
       characteristicId
     )
     await characteristic.startNotifications()
-    characteristic.addEventListener('characteristicvaluechanged', () => {
-      const value = new Uint8Array(characteristic.value.buffer)
-      cb(value)
+    characteristic.addEventListener('characteristicvaluechanged', async () => {
+      const value = await characteristic.readValue()
+      cb(new Uint8Array(value.buffer))
     })
   }
 }

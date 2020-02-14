@@ -1,7 +1,7 @@
 export type DeviceId = string
 
 export interface WebBle {
-  startScanning: (cb: (id: DeviceId, name: string) => void) => Promise<void>
+  startScanning: (cb: (id: DeviceId, name?: string) => void) => Promise<void>
   connect: (id: DeviceId, onDisconnect: () => void) => Promise<void>
   read: (
     id: DeviceId,
