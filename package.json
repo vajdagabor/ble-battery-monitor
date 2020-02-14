@@ -10,7 +10,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts .",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "tsc:watch": "tsc --noEmit --watch -p ."
   },
   "keywords": [],
   "author": {
